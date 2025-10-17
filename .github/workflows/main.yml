@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install pyinstaller
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install -r requirements.txt || echo "No requirements.txt found"
 
       - name: Build app
         run: |
@@ -33,9 +33,11 @@ jobs:
           else
             pyinstaller --windowed --onefile --icon=icons/app.icns --add-data "data:data" Med_static.py
           fi
+        shell: bash
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: Med_static-${{ runner.os }}
           path: dist/
+
